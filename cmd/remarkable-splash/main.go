@@ -18,14 +18,13 @@ func main() {
 	go splash.WifiSignalConnected(wifiConnected)
 
 	t0 := time.Now()
-
 	for {
 		select {
 		case <-wifiConnected:
 		case <-time.After(flags.pollInterval):
 		}
 
-		if time.Since(t0) < flags.pollInterval {
+		if time.Since(t0) < flags.minPollInterval {
 			continue
 		}
 
@@ -52,8 +51,9 @@ func main() {
 }
 
 type flags struct {
-	output       string
-	pollInterval time.Duration
+	output          string
+	pollInterval    time.Duration
+	minPollInterval time.Duration
 }
 
 func parseFlags() flags {
@@ -61,6 +61,7 @@ func parseFlags() flags {
 
 	flag.StringVar(&flags.output, "output", "", "path to output downloaded image")
 	flag.DurationVar(&flags.pollInterval, "poll-interval", 6*time.Hour, "time between polling xkcd")
+	flag.DurationVar(&flags.pollInterval, "min-poll-interval", 5*time.Minute, "minimum time between polling xkcd")
 
 	flag.Parse()
 
