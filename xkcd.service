@@ -1,0 +1,11 @@
+[Unit]
+Description=XKCD
+
+[Service]
+ExecStart=/home/root/remarkable-splash \
+    -output /usr/share/remarkable/suspended.png
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
